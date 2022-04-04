@@ -1,7 +1,7 @@
 # ColorCoder
 A web application that turns input into an image file that can later be decoded into the original input.
 
-Live deployment at [LawlessSolutions.us](lawlesssolutions.us/colorCoder/colorCoder.html)
+Live deployment at [LawlessSolutions.us](https://lawlesssolutions.us/colorCoder/colorCoder.html)
 
 ## Initial list of todos
 - [x] upload form to upload file from local directory
