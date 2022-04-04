@@ -4,7 +4,16 @@ function getFile (inp){
   let fr = new FileReader();
   fr.readAsText(file);
   fr.onload = function(){
-    console.log(colorCode (fr.result));
+    let hexCodes = colorCode (fr.result, file['name']);
+    let imgMain = document.createElement ("canvas");
+    imgMain.width = hexCodes.length;
+    imgMain.height = 100;
+    document.body.appendChild(imgMain);
+    let ctx = imgMain.getContext("2d");
+    for (let i=0;i<hexCodes.length;++i){
+      ctx.fillStyle = hexCodes[i];
+      ctx.fillRect (i,0,i+1,100);
+    }
   };
   
   fr.onerror = function(){
@@ -23,12 +32,15 @@ function rgb10(r,g,b){
   return "#" + rR + rG + rB;
 }
 
-function colorCode (strInp){
+function colorCode (strInp, strName){
   //returns an array of color codes;
   let colors    = [[],[],[]];
   let colorsHex = [];
-  for(let i=0;i<strInp.length;++i){
-    colors[i%3].push(strInp[i].charCodeAt(0));
+  while(strName.length<256)
+    strName += String.fromCharCode (0);
+  let wholeStr = strName + strInp;
+  for(let i=0;i<wholeStr.length;++i){
+    colors[i%3].push(wholeStr[i].charCodeAt(0));
   }
   if (colors[0].length>colors[1].length)
     colors[1].push(0);
