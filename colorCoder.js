@@ -104,5 +104,9 @@ function colorDecode(imgInp){
     retVal += String.fromCharCode(p[1]);
     retVal += String.fromCharCode(p[2]);
   }
-  return [name.substring(0,name.length-1), retVal];
+  
+  name = name.replace(String.fromCharCode(0),'');
+  while (retVal[-1] === String.fromCharCode(0))
+    retVal = retVal.substr(0,retVal.length-1);
+  return [name, retVal];
 }
