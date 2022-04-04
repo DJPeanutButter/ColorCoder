@@ -4,13 +4,12 @@ function getFile (inp, encode=true){
   let fr = new FileReader();
 
   if (encode){
-    fr.readAsText(file);
+    fr.readAsBinaryString(file);
     fr.onload = function(){
       let hexCodes = colorCode (fr.result, file['name']);
-      let imgMain = document.createElement ("canvas");
+      let imgMain = document.getElementById ("main-canvas");
       imgMain.width = hexCodes.length;
       imgMain.height = 100;
-      document.body.appendChild(imgMain);
       let ctx = imgMain.getContext("2d");
       for (let i=0;i<hexCodes.length;++i){
         ctx.fillStyle = hexCodes[i];
@@ -25,12 +24,10 @@ function getFile (inp, encode=true){
       imgTmp.onload = function(){
         let tmpTxt = document.createElement("textarea");
         let tmpDecode = colorDecode(imgTmp);
-        let link = document.createElement("a");
+        let link = document.getElementById("download-link");
         link.download = tmpDecode[0];
         let tmpBlob = new Blob ([tmpDecode[1]],{type: 'text/plain'});
         link.href = window.URL.createObjectURL(tmpBlob);
-        link.innerHTML = "Download";
-        document.body.appendChild(link);
       }
     }
   }
