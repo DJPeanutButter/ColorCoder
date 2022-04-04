@@ -1,20 +1,39 @@
-function getFile (inp){
+function getFile (inp, encode=true){
   //no return
   let file = inp.files[0];
   let fr = new FileReader();
-  fr.readAsText(file);
-  fr.onload = function(){
-    let hexCodes = colorCode (fr.result, file['name']);
-    let imgMain = document.createElement ("canvas");
-    imgMain.width = hexCodes.length;
-    imgMain.height = 100;
-    document.body.appendChild(imgMain);
-    let ctx = imgMain.getContext("2d");
-    for (let i=0;i<hexCodes.length;++i){
-      ctx.fillStyle = hexCodes[i];
-      ctx.fillRect (i,0,i+1,100);
+
+  if (encode){
+    fr.readAsText(file);
+    fr.onload = function(){
+      let hexCodes = colorCode (fr.result, file['name']);
+      let imgMain = document.createElement ("canvas");
+      imgMain.width = hexCodes.length;
+      imgMain.height = 100;
+      document.body.appendChild(imgMain);
+      let ctx = imgMain.getContext("2d");
+      for (let i=0;i<hexCodes.length;++i){
+        ctx.fillStyle = hexCodes[i];
+        ctx.fillRect (i,0,i+1,100);
+      }
+    };
+  }else{
+    fr.readAsDataURL(file);
+    fr.onload = function(){
+      var imgTmp = new Image();
+      imgTmp.src = fr.result;
+      imgTmp.onload = function(){
+        let tmpTxt = document.createElement("textarea");
+        let tmpDecode = colorDecode(imgTmp);
+        let link = document.createElement("a");
+        link.download = tmpDecode[0];
+        let tmpBlob = new Blob ([tmpDecode[1]],{type: 'text/plain'});
+        link.href = window.URL.createObjectURL(tmpBlob);
+        link.innerHTML = "Download";
+        document.body.appendChild(link);
+      }
     }
-  };
+  }
   
   fr.onerror = function(){
     console.log (fr.error);
@@ -32,7 +51,7 @@ function rgb10(r,g,b){
   return "#" + rR + rG + rB;
 }
 
-function colorCode (strInp, strName){
+function colorCode(strInp, strName){
   //returns an array of color codes;
   let colors    = [[],[],[]];
   let colorsHex = [];
@@ -50,4 +69,40 @@ function colorCode (strInp, strName){
     colorsHex.push(rgb10(colors[0][i],colors[1][i],colors[2][i]));
   }
   return colorsHex;
+}
+
+function colorDecode(imgInp){
+  //returns text value of file
+  let imgMain = document.createElement ("canvas");
+  let ctx = imgMain.getContext("2d");
+  imgMain.width = imgInp.width;
+  if (imgMain.width < 256)
+    return "Image is not of correct length!";
+  imgMain.height = imgInp.height;
+  ctx.drawImage (imgInp, 0, 0);
+  let retVal = "";
+  let name = "";
+  for (let i=0;i<86;++i){
+    let p = ctx.getImageData(i,10,1,1).data;
+    if (p[0] === 0)
+      break;
+    name += String.fromCharCode (p[0]);
+    if (i!==86){
+      if (p[1] === 0)
+        break;
+      name += String.fromCharCode (p[1]);
+      if (p[2] === 0)
+        break;
+      name += String.fromCharCode (p[2]);
+    }
+  }
+  name += String.fromCharCode(0);
+  for (let i=85;i<imgMain.width;++i){
+    let p = ctx.getImageData(i,10,1,1).data;
+    if (i!==85)
+      retVal += String.fromCharCode(p[0]);
+    retVal += String.fromCharCode(p[1]);
+    retVal += String.fromCharCode(p[2]);
+  }
+  return [name.substring(0,name.length-1), retVal];
 }
