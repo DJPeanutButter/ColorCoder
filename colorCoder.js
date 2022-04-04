@@ -4,7 +4,7 @@ function getFile (inp){
   let fr = new FileReader();
   fr.readAsText(file);
   fr.onload = function(){
-    colorCode (fr.result);
+    console.log(colorCode (fr.result));
   };
   
   fr.onerror = function(){
