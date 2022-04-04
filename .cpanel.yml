@@ -1,0 +1,7 @@
+---
+deployment:
+  tasks:
+    - export DEPLOYPATH=/home3/lssnwfco/public_html/colorCoder/
+    - /bin/rm -r $DEPLOYPATH
+    - /bin/mkdir $DEPLOYPATH
+    - /bin/cp -R * $DEPLOYPATH
