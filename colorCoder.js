@@ -25,7 +25,6 @@ function rgb10(r,g,b){
 
 function colorCode (strInp){
   //returns an array of color codes;
-  console.log(tmp = strInp);
   let colors    = [[],[],[]];
   let colorsHex = [];
   for(let i=0;i<strInp.length;++i){
