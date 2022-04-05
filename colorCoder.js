@@ -36,7 +36,7 @@ function getFile (inp, encode=true){
   };
 }
 
-function rgb10(r,g,b){
+function rbg(r,g,b){
   //returns an HTML color code
   let rR = "0"+r.toString(16);
   let rG = "0"+g.toString(16);
@@ -62,7 +62,7 @@ function colorCode(strInp, strName){
   if (colors[1].length>colors[2].length)
     colors[2].push(0);
   for (let i=0;i<colors[0].length;++i){
-    colorsHex.push(rgb10(colors[0][i],colors[1][i],colors[2][i]));
+    colorsHex.push(rbg(colors[0][i],colors[1][i],colors[2][i]));
   }
   return colorsHex;
 }
