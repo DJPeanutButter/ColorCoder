@@ -92,7 +92,7 @@ function colorDecode(imgInp){
       name += String.fromCharCode (p[2]);
     }
   }
-  name += String.fromCharCode(0);
+  name += String.fromCharCode(0); //ensures it's null terminated
   for (let i=85;i<imgMain.width;++i){
     let p = ctx.getImageData(i,10,1,1).data;
     if (i!==85)
