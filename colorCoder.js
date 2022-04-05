@@ -55,7 +55,7 @@ function colorCode(strInp, strName){
     strName += String.fromCharCode (0);
   let wholeStr = strName + strInp;
   for(let i=0;i<wholeStr.length;++i){
-    colors[i%3].push(wholeStr[i].charCodeAt(0));
+    colors[i%3].push(wholeStr.charCodeAt(i));
   }
   if (colors[0].length>colors[1].length)
     colors[1].push(0);
