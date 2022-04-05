@@ -4,7 +4,7 @@ function getFile (inp, encode=true){
   let fr = new FileReader();
 
   if (encode){
-    fr.readAsBinaryString(file);
+    fr.readAsText(file);
     fr.onload = function(){
       let hexCodes = colorCode (fr.result, file['name']);
       let imgMain = document.getElementById ("main-canvas");
@@ -22,7 +22,6 @@ function getFile (inp, encode=true){
       var imgTmp = new Image();
       imgTmp.src = fr.result;
       imgTmp.onload = function(){
-        let tmpTxt = document.createElement("textarea");
         let tmpDecode = colorDecode(imgTmp);
         let link = document.getElementById("download-link");
         link.download = tmpDecode[0];
@@ -101,9 +100,8 @@ function colorDecode(imgInp){
     retVal += String.fromCharCode(p[1]);
     retVal += String.fromCharCode(p[2]);
   }
-  
-  name = name.replace(String.fromCharCode(0),'');
-  while (retVal[-1] === String.fromCharCode(0))
+  while(retVal[-1]===String.fromCharCode(0) ||
+        retVal[-1]===String.fromCharCode(32))
     retVal = retVal.substr(0,retVal.length-1);
-  return [name, retVal];
+  return [name.substring(0,name.length-1), retVal];
 }
